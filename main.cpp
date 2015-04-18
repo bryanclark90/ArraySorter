@@ -8,11 +8,9 @@
 using namespace std;
 
 // Generates an array with random numbers in the range [0,1000]
-int* GenArr(int count)
-{
+int* genArr(int count) {
 	int* arr = new int[count];
-	for (int i = 0; i < count; i++)
-	{
+	for (int i = 0; i < count; i++) {
 		arr[i] = rand() % 1001;
 	}
 	return arr;
@@ -24,7 +22,7 @@ int main(int argc, char* argv[])
 	srand(time(NULL));
 	
 	int count = 10000;
-	int* numsOriginal = GenArr(count);
+	int* nums = genArr(count);
 
 	// Create the sorter object
 	ArraySorter sorter;
@@ -32,7 +30,9 @@ int main(int argc, char* argv[])
 	while (true)
 	{
 		// Ask for an action
-		cout << "Choose option:" << endl;
+		cout << "-------------------------------------------------" << endl;
+		cout << "--------------- Array Sorter Menu ---------------" << endl;
+		cout << "Choose option from below:" << endl;
 		cout << "  1 = Display array contents (may be VERY long)" << endl;
 		cout << "  2 = Sort with insertion sort (may be slow)" << endl;
 		cout << "  3 = Sort with shell sort (gap 5 then gap 1)" << endl;
@@ -40,111 +40,97 @@ int main(int argc, char* argv[])
 		cout << "  5 = Sort with mergesort" << endl;
 		cout << "  6 = Sort with quicksort" << endl;
 		cout << "  7 = Sort with Heap Sort" << endl;
-		cout << "  (anything else) = quit" << endl;
+		cout << "  8 = Generate a new array?" << endl;
+		cout << "  9 = Programmer Info" << endl;
+		cout << "  10 = quit" << endl;
+		cout << "-------------------------------------------------" << endl;
+		cout << "-------------------------------------------------" << endl; 
 		cout << "? ";
-		int opt = -1;
-		cin >> opt;
-
-		// Make a copy of the number array
-		int* nums = new int[count];
-		for (int i = 0; i < count; i++)
-		{
-			nums[i] = numsOriginal[i];
-		}
+		char input[10];
+		cin >> input;
+		int opt = myatoi(input);
 
 		clock_t time = clock();
-
-		bool didSort = true;
-		if (1 == opt)
-		{
-			// Show the contents
-			cout << "Array contents (" << count << " items):";
-			for (int i = 0; i < count; i++)
-			{
-				cout << " " << nums[i];
-			}
-			cout << endl << endl;
-			didSort = false;
-		}
-		else if (2 == opt)
-		{
-			sorter.InsertionSort(nums, count);
-		}
-		else if (3 == opt)
-		{
-			int gaps[2] = {5, 1};
-			sorter.ShellSort(nums, count, gaps, 2);
-		}
-		else if (4 == opt)
-		{
-			int gaps[4] = {12, 7, 3, 1};
-			sorter.ShellSort(nums, count, gaps, 4);
-		}
-		else if (5 == opt)
-		{
-			sorter.MergeSort(nums, count);
-		}
-		else if (6 == opt)
-		{
-			sorter.QuickSort(nums, count);
-		}
-		else if (7 == opt)
-		{
-			sorter.HeapSort(nums, count);
-		}
-		else
-		{
-			delete [] nums;
-			break;
-		}
-
-		if (didSort)
-		{
-			// Stop the timer
-			time = clock() - time;
-			
-			// Verify
-			if (!ArraySorter::IsSorted(nums, count))
-			{
-				cout << endl << "ERROR: Array is NOT correctly sorted!" << endl << endl;
-			}
-			else
-			{
-				cout << "Array contents verified as correctly sorted!" << endl;
-				cout << "Sorted in " << ((double)time / CLOCKS_PER_SEC) << " seconds!" <<endl;
-				cout << endl;
-				cout << "Press 1 to compare the two array contents" << endl;
-				int opt = -1;
-				cin >> opt;
-				if(opt == 1)
-				{
-						cout << "Original Array: ";
-						for(int i = 0; i < count; i++)
-						{
-							cout << numsOriginal[i] << " ";
-						}
-						cout << endl;
-						cout << endl;
-						cout << "Sorted Array:   ";
-						for(int i = 0; i < count; i++)
-						{
-							cout << nums[i] << " ";
-						}
-						cout << endl;
-						cout << endl;
+		int gaps[2] = {5, 1};
+		int gap[4] = {12, 7, 3, 1};
+		switch(opt) {
+			case 1:
+				// Show the contents
+				displayArr(nums, count, sorter.isSorted(nums, count));
+				break;
+			case 2:
+				sorter.insertionSort(nums, count, 0 ,1);
+				if(sorter.isSorted(nums, count)) {
+					sortTimer(time);
 				}
-			}
-
-			cout << "New Array will be generated to do sorting on!" << endl;
-			//GENERATE A NEW ARRAY AFTER PREVIOUS ARRAY IS SORTED
-			numsOriginal = GenArr(count);
+				break;
+			case 3:
+				sorter.shellSort(nums, count, gaps, 2);
+				if(sorter.isSorted(nums, count)) {
+					sortTimer(time);
+				}
+				break;
+			case 4:
+				sorter.shellSort(nums, count, gap, 4);
+				if(sorter.isSorted(nums, count)) {
+					sortTimer(time);
+				}
+				break;
+			case 5:
+				sorter.mergeSort(nums, count);
+				if(sorter.isSorted(nums, count)) {
+					sortTimer(time);
+				}
+				break;
+			case 6:
+				sorter.quickSort(nums, count);
+				if(sorter.isSorted(nums, count)) {
+					sortTimer(time);
+				}
+				break;
+			case 7:
+				sorter.heapSort(nums, count);
+				if(sorter.isSorted(nums, count)) {
+					sortTimer(time);
+				}
+				break;
+			case 8:
+				cout << "Array is currently "<< count <<" elements!" << endl;
+				cout << "How many elements would you like to sort?" << endl;
+				cout << "WARNING: large numbers make take a while:" <<endl;
+				cin >> input;
+				count = myatoi(input);
+				if(count < 0) {
+					cout << "ERROR! Array cannot be less than 1!" << endl;
+				}
+				else {
+					nums = genArr(count);
+				}
+				break;
+			case 9:
+				cout << endl;
+				cout << "=================================================" << endl;
+				cout << "============== My Contact Info ==================" << endl;
+				cout << "Programmer:			Bryan Kieth Clark" << endl;
+				cout << "Email:			bryan.clark@email.wsu.edu" << endl;
+				cout << "Phone:			            (509)294-4161" << endl;
+				cout << "=================================================" << endl;
+				cout << "=================================================" << endl;
+				cout << endl;
+				break;
+			case 10:
+				delete [] nums;
+				cout << "Goodbye!" <<endl;
+				return 0;
+			//display my personal info	
+			default:
+				{cout << "Invalid option!" << endl << endl;}
+				break;
 		}
-
 		cout << endl << endl;
-
-		// Free the copy (it will be rebuilt in the next loop iteration)
-		delete [] nums;
+		cout << "Enter 'C' to Continue:" << endl;
+		char temp = 'x';
+		while(toupper(temp) != 'C')
+			cin.get(temp);
 	}
-
-	delete [] numsOriginal;
 }
