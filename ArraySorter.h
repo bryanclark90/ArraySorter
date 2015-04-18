@@ -3,36 +3,40 @@
 
 #include <iostream>
 #include <math.h>
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
+
 #pragma once
+
 
 class ArraySorter
 {
 private:
 	// Add private helper functions here
+	void quickSorter( int* arr, int left, int right);
+	void myMergeSort(int* arr, int p, int n);
+	void combine(int* arr, int n, int p, int q);
+	void makeHeap(int* arr, int low, int high);
+	void makeValidHeap(int* arr, int root, int high);
+	
+	void swap(int* arr, int a, int b)
+	{
+		int temp = arr[a];
+		arr[a] = arr[b];
+		arr[b] = temp;
+	};
 
 public:
 	ArraySorter(void);
+	void insertionSort(int* arr, int n, int startIndex, int gap);
+	void mergeSort(int* arr, int n);
+	void quickSort(int* arr, int n);
+	void shellSort(int* arr, int n, int* gapVals, int gapValsCount);
+	bool heapSort(int* arr, int n);
 
-	void InsertionSort(int* arr, int n, int startIndex, int gap);
-	void InsertionSort(int* arr, int n);
-	void MergeSort(int* arr, int n);
-	void QuickSort(int* arr, int n);
-	void ShellSort(int* arr, int n, int* gapVals, int gapValsCount);
-	void Combine(int* arr, int n, int p, int q);
-	void MyMergeSort(int* arr, int p, int n);
-	void QuickSorter( int* arr, int left, int right);
-	// Utility function that's implemented for you to verify that an 
-	// array is in correct sorted order.
-	static bool IsSorted(int* arr, int n);
-	bool HeapSort(int* arr, int n);
-	void MakeHeap(int* arr, int Low, int High);
-	void MakeValidHeap(int* arr, int Low, int High);
-
-	void Swap(int& a, int &b)
-	{
-		int temp = a;
-		a = b;
-		b = temp;
-	};
+	//utiity function
+	static bool isSorted(int* arr, int n);
 };
+	
+void displayArr(int* arr, int count, bool isSorted);
