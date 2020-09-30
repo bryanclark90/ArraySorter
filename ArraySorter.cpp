@@ -1,7 +1,8 @@
 ///Programmer: Bryan K Clark
 //Email: bryan.clark@email.wsu.edu
 //Phone: (509)294-4161
-
+//Below is the beautiful implementation of the array sorter  function.
+//For more info see main.cpp
 
 #include "ArraySorter.h"
 
